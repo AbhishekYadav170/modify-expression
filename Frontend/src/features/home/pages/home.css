@@ -952,3 +952,640 @@
         gap: 15px;
     }
 }
+
+
+/* =========================================================
+   EXPRESSION SCANNER
+   ========================================================= */
+
+.expression-scanner {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+
+/* ================= CAMERA STATUS ================= */
+
+.scanner-status {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 2px 2px;
+}
+
+.scanner-status-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    color: #8b8b95;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.camera-dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #666;
+}
+
+.camera-dot.ready {
+    background: #4ade80;
+
+    box-shadow:
+        0 0 0 4px rgba(74, 222, 128, 0.08),
+        0 0 14px rgba(74, 222, 128, 0.65);
+
+    animation: cameraPulse 2s infinite;
+}
+
+@keyframes cameraPulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.55;
+    }
+}
+
+
+.scanner-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 5px 9px;
+
+    border-radius: 7px;
+
+    background: rgba(255, 70, 40, 0.08);
+
+    border: 1px solid rgba(255, 90, 50, 0.15);
+
+    color: #ff7042;
+
+    font-size: 8px;
+    font-weight: 800;
+
+    letter-spacing: 0.12em;
+}
+
+.scanner-live::before {
+    content: "";
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: #ff5a32;
+
+    box-shadow:
+        0 0 8px rgba(255, 90, 50, 0.7);
+}
+
+
+/* =========================================================
+   VIDEO CONTAINER
+   ========================================================= */
+
+.video-container {
+    position: relative;
+
+    width: 100%;
+
+    min-height: 430px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    border-radius: 18px;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(255, 90, 31, 0.06),
+            transparent 55%
+        ),
+        #030304;
+
+    border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+
+/* VIDEO */
+
+.expression-video {
+    display: block;
+
+    width: 100%;
+    height: 430px;
+
+    object-fit: cover;
+
+    border-radius: 16px;
+
+    background: #050506;
+}
+
+
+/* =========================================================
+   CAMERA CORNERS
+   ========================================================= */
+
+.scan-corner {
+    position: absolute;
+
+    width: 28px;
+    height: 28px;
+
+    z-index: 3;
+
+    pointer-events: none;
+}
+
+
+.scan-corner.top-left {
+    top: 18px;
+    left: 18px;
+
+    border-top: 2px solid #ff6333;
+    border-left: 2px solid #ff6333;
+
+    border-radius: 5px 0 0 0;
+}
+
+
+.scan-corner.top-right {
+    top: 18px;
+    right: 18px;
+
+    border-top: 2px solid #ff6333;
+    border-right: 2px solid #ff6333;
+
+    border-radius: 0 5px 0 0;
+}
+
+
+.scan-corner.bottom-left {
+    bottom: 18px;
+    left: 18px;
+
+    border-bottom: 2px solid #ff6333;
+    border-left: 2px solid #ff6333;
+
+    border-radius: 0 0 0 5px;
+}
+
+
+.scan-corner.bottom-right {
+    bottom: 18px;
+    right: 18px;
+
+    border-bottom: 2px solid #ff6333;
+    border-right: 2px solid #ff6333;
+
+    border-radius: 0 0 5px 0;
+}
+
+
+/* =========================================================
+   SCAN LINE
+   ========================================================= */
+
+.scan-line {
+    position: absolute;
+
+    left: 12%;
+    right: 12%;
+
+    top: 20%;
+
+    height: 1px;
+
+    z-index: 2;
+
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 99, 51, 0.8),
+            transparent
+        );
+
+    box-shadow:
+        0 0 12px rgba(255, 99, 51, 0.4);
+
+    opacity: 0.35;
+
+    animation: scanLine 4s ease-in-out infinite;
+}
+
+
+@keyframes scanLine {
+
+    0% {
+        top: 18%;
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 0.45;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+
+    85% {
+        opacity: 0.45;
+    }
+
+    100% {
+        top: 82%;
+        opacity: 0;
+    }
+}
+
+
+/* =========================================================
+   SCANNING OVERLAY
+   ========================================================= */
+
+.scan-overlay {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 10;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 14px;
+
+    background:
+        rgba(3, 3, 4, 0.58);
+
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+
+    color: #f4f4f5;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+.scan-spinner {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 50%;
+
+    border: 2px solid rgba(255, 255, 255, 0.12);
+
+    border-top-color: #ff6333;
+
+    animation:
+        scannerSpin 0.8s linear infinite;
+}
+
+
+@keyframes scannerSpin {
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   MOOD RESULT CARD
+   ========================================================= */
+
+.mood-result {
+    width: 100%;
+
+    min-height: 76px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 13px 14px;
+
+    box-sizing: border-box;
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.035),
+            rgba(255, 255, 255, 0.012)
+        );
+
+    border: 1px solid rgba(255, 255, 255, 0.07);
+
+    transition:
+        all 0.3s ease;
+}
+
+
+.mood-result.active {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 90, 31, 0.12),
+            rgba(255, 255, 255, 0.025)
+        );
+
+    border-color:
+        rgba(255, 90, 31, 0.25);
+
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, 0.18);
+}
+
+
+/* =========================================================
+   PLACEHOLDER MOOD
+   ========================================================= */
+
+.mood-placeholder-icon {
+    flex-shrink: 0;
+
+    width: 46px;
+    height: 46px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 14px;
+
+    background:
+        rgba(255, 255, 255, 0.045);
+
+    border: 1px solid rgba(255, 255, 255, 0.06);
+
+    color: #85858e;
+
+    font-size: 20px;
+}
+
+
+.mood-result > div:nth-child(2) {
+    min-width: 0;
+}
+
+
+/* =========================================================
+   MOOD EMOJI
+   ========================================================= */
+
+.mood-emoji-large {
+    flex-shrink: 0;
+
+    width: 52px;
+    height: 52px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 102, 55, 0.15),
+            rgba(255, 102, 55, 0.05)
+        );
+
+    border: 1px solid rgba(255, 102, 55, 0.14);
+
+    font-size: 28px;
+
+    box-shadow:
+        0 8px 25px rgba(255, 90, 31, 0.08);
+}
+
+
+/* =========================================================
+   MOOD TEXT
+   ========================================================= */
+
+.mood-result-text {
+    flex: 1;
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+
+.mood-result-text span,
+.mood-result > div:not(.mood-emoji-large):not(.mood-check) span {
+    color: #ff7042;
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.13em;
+
+    text-transform: uppercase;
+}
+
+
+.mood-result-text strong {
+    color: #f4f4f5;
+
+    font-size: 17px;
+
+    line-height: 1.2;
+
+    letter-spacing: -0.02em;
+}
+
+
+.mood-result-text p {
+    margin: 2px 0 0;
+
+    color: #74747e;
+
+    font-size: 10px;
+
+    line-height: 1.45;
+}
+
+
+/* =========================================================
+   SUCCESS CHECK
+   ========================================================= */
+
+.mood-check {
+    flex-shrink: 0;
+
+    width: 30px;
+    height: 30px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 50%;
+
+    background:
+        rgba(74, 222, 128, 0.09);
+
+    border: 1px solid rgba(74, 222, 128, 0.15);
+
+    color: #4ade80;
+
+    font-size: 13px;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   DETECT BUTTON
+   ========================================================= */
+
+.detect-button {
+    width: 100%;
+
+    min-height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+
+    padding: 12px 18px;
+
+    border: 1px solid rgba(255, 92, 35, 0.25);
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff5a1f,
+            #ff713d
+        );
+
+    color: white;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.01em;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 10px 28px rgba(255, 90, 31, 0.16);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        filter 0.2s ease;
+}
+
+
+.detect-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+
+    filter: brightness(1.06);
+
+    box-shadow:
+        0 14px 34px rgba(255, 90, 31, 0.24);
+}
+
+
+.detect-button:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+
+.detect-button:disabled {
+    opacity: 0.55;
+
+    cursor: not-allowed;
+
+    box-shadow: none;
+}
+
+
+.detect-button-icon {
+    width: 22px;
+    height: 22px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 7px;
+
+    background:
+        rgba(255, 255, 255, 0.14);
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 650px) {
+
+    .video-container {
+        min-height: 330px;
+    }
+
+    .expression-video {
+        height: 330px;
+    }
+
+    .mood-result {
+        padding: 12px;
+    }
+
+    .mood-emoji-large,
+    .mood-placeholder-icon {
+        width: 44px;
+        height: 44px;
+    }
+
+    .mood-result-text strong {
+        font-size: 15px;
+    }
+
+    .mood-result-text p {
+        font-size: 9px;
+    }
+}

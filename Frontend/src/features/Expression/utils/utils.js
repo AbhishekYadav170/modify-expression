@@ -1,70 +1,223 @@
- import {
+//  import {
+//   FaceLandmarker,
+//   FilesetResolver
+// } from "@mediapipe/tasks-vision";
+ 
+ 
+// export const init = async ({landmarkerRef, videoRef, streamRef }) => {
+//       const vision = await FilesetResolver.forVisionTasks(
+//         "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/wasm"
+//       );
+//       landmarkerRef.current = await FaceLandmarker.createFromOptions(
+//         vision,
+//         {
+//           baseOptions: {
+//             modelAssetPath:
+//             "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/latest/face_landmarker.task"
+//           },
+//           outputFaceBlendshapes: true,
+//           runningMode: "VIDEO",
+//           numFaces: 1
+//         }
+//       );
+//       streamRef.current = await navigator.mediaDevices.getUserMedia({ video: true});
+//       videoRef.current.srcObject = streamRef.current;
+//        await videoRef.current.play();
+//      //dedect()
+// };
+
+// export const detect = ({ landmarkerRef, videoRef, setExpression}) => {
+//       if (!landmarkerRef.current || !videoRef.current) return;
+
+//       const results = landmarkerRef.current.detectForVideo(
+//         videoRef.current,
+//         performance.now()
+//       );
+
+//       if (results.faceBlendshapes?.length > 0) {
+//         const blendshapes = results.faceBlendshapes[0].categories;
+
+//         const getScore = (name) =>
+//           blendshapes.find((b) => b.categoryName === name)?.score || 0;
+
+//         const smileLeft = getScore("mouthSmileLeft");
+//         const smileRight = getScore("mouthSmileRight");
+//         const jawOpen = getScore("jawOpen");
+//         const browUp = getScore("browInnerUp");
+//         const frownLeft = getScore("mouthFrownLeft");
+//         const frownRight = getScore("mouthFrownRight");
+
+//         // console.log(getScore("jawOpen"), getScore("browInnerUp"))
+//         console.log(getScore("mouthFrownLeft"))
+        
+
+//         let currentExpression = "Neutral ";
+
+//         if(smileLeft > 0.5 && smileRight > 0.5) {
+//           currentExpression = "happy ";
+//         } else if (jawOpen > 0.6 && browUp > 0.5) {
+//           currentExpression = "Surprised ";
+//         } else if (frownLeft > 0.01 && frownRight > 0.01) {
+//           currentExpression = "Sad ";
+//         }
+
+//         setExpression(currentExpression);
+
+//         return currentExpression
+//       }
+
+//       // animationRef.current = requestAnimationFrame(detect);
+//     };
+
+
+
+
+
+import {
   FaceLandmarker,
   FilesetResolver
 } from "@mediapipe/tasks-vision";
- 
- 
-export const init = async ({landmarkerRef, videoRef, streamRef }) => {
-      const vision = await FilesetResolver.forVisionTasks(
-        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/wasm"
-      );
-      landmarkerRef.current = await FaceLandmarker.createFromOptions(
-        vision,
-        {
-          baseOptions: {
-            modelAssetPath:
+
+
+export const init = async ({
+  landmarkerRef,
+  videoRef,
+  streamRef
+}) => {
+
+  const vision = await FilesetResolver.forVisionTasks(
+    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/wasm"
+  );
+
+  landmarkerRef.current =
+    await FaceLandmarker.createFromOptions(
+      vision,
+      {
+        baseOptions: {
+          modelAssetPath:
             "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/latest/face_landmarker.task"
-          },
-          outputFaceBlendshapes: true,
-          runningMode: "VIDEO",
-          numFaces: 1
-        }
-      );
-      streamRef.current = await navigator.mediaDevices.getUserMedia({ video: true});
-      videoRef.current.srcObject = streamRef.current;
-       await videoRef.current.play();
-     //dedect()
+        },
+
+        outputFaceBlendshapes: true,
+
+        runningMode: "VIDEO",
+
+        numFaces: 1
+      }
+    );
+
+  streamRef.current =
+    await navigator.mediaDevices.getUserMedia({
+      video: true
+    });
+
+  videoRef.current.srcObject =
+    streamRef.current;
+
+  await videoRef.current.play();
 };
 
-export const detect = ({ landmarkerRef, videoRef, setExpression}) => {
-      if (!landmarkerRef.current || !videoRef.current) return;
 
-      const results = landmarkerRef.current.detectForVideo(
-        videoRef.current,
-        performance.now()
-      );
+export const detect = ({
+  landmarkerRef,
+  videoRef,
+  setExpression
+}) => {
 
-      if (results.faceBlendshapes?.length > 0) {
-        const blendshapes = results.faceBlendshapes[0].categories;
+  if (
+    !landmarkerRef.current ||
+    !videoRef.current
+  ) {
+    return null;
+  }
 
-        const getScore = (name) =>
-          blendshapes.find((b) => b.categoryName === name)?.score || 0;
+  const results =
+    landmarkerRef.current.detectForVideo(
+      videoRef.current,
+      performance.now()
+    );
 
-        const smileLeft = getScore("mouthSmileLeft");
-        const smileRight = getScore("mouthSmileRight");
-        const jawOpen = getScore("jawOpen");
-        const browUp = getScore("browInnerUp");
-        const frownLeft = getScore("mouthFrownLeft");
-        const frownRight = getScore("mouthFrownRight");
 
-        // console.log(getScore("jawOpen"), getScore("browInnerUp"))
-        console.log(getScore("mouthFrownLeft"))
-        
+  if (
+    results.faceBlendshapes?.length > 0
+  ) {
 
-        let currentExpression = "Neutral ";
+    const blendshapes =
+      results.faceBlendshapes[0].categories;
 
-        if(smileLeft > 0.5 && smileRight > 0.5) {
-          currentExpression = "happy ";
-        } else if (jawOpen > 0.6 && browUp > 0.5) {
-          currentExpression = "Surprised ";
-        } else if (frownLeft > 0.01 && frownRight > 0.01) {
-          currentExpression = "Sad ";
-        }
 
-        setExpression(currentExpression);
+    const getScore = (name) =>
+      blendshapes.find(
+        (b) => b.categoryName === name
+      )?.score || 0;
 
-        return currentExpression
-      }
 
-      // animationRef.current = requestAnimationFrame(detect);
-    };
+    const smileLeft =
+      getScore("mouthSmileLeft");
+
+    const smileRight =
+      getScore("mouthSmileRight");
+
+    const jawOpen =
+      getScore("jawOpen");
+
+    const browUp =
+      getScore("browInnerUp");
+
+    const frownLeft =
+      getScore("mouthFrownLeft");
+
+    const frownRight =
+      getScore("mouthFrownRight");
+
+
+    let currentExpression = "neutral";
+
+
+    if (
+      smileLeft > 0.5 &&
+      smileRight > 0.5
+    ) {
+
+      currentExpression = "happy";
+
+    } else if (
+      jawOpen > 0.6 &&
+      browUp > 0.5
+    ) {
+
+      currentExpression = "surprised";
+
+    } else if (
+      frownLeft > 0.01 &&
+      frownRight > 0.01
+    ) {
+
+      currentExpression = "sad";
+    }
+
+
+    /*
+      UI ke liye capitalized expression
+    */
+    const displayExpression =
+      currentExpression.charAt(0).toUpperCase() +
+      currentExpression.slice(1);
+
+
+    setExpression(displayExpression);
+
+
+    /*
+      API ke liye clean value
+      happy
+      sad
+      surprised
+      neutral
+    */
+    return currentExpression;
+  }
+
+
+  return null;
+};
