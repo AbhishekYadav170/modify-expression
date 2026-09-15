@@ -49,16 +49,41 @@ async function uploadSong(req,res) {
 }
 
 async function getSong(req, res) {
+    try {
+        const { mood } = req.query;
 
-    const { mood } = req.query
-    const song = await songModel.findOne({
-        mood
-    })
+        if (!mood) {
+            return res.status(400).json({
+                message: "Mood is required"
+            });
+        }
 
-    res.status(200).json({
-        message: "song fetched successfully.",
-        song,
-    })
+        const songs = await songModel.find({
+            mood: mood.toLowerCase().trim()
+        });
+
+        if (!songs.length) {
+            return res.status(404).json({
+                message: `No songs found for mood: ${mood}`
+            });
+        }
+
+        // Random song select
+        const randomSong =
+            songs[Math.floor(Math.random() * songs.length)];
+
+        return res.status(200).json({
+            message: "Song fetched successfully.",
+            song: randomSong
+        });
+
+    } catch (error) {
+        console.error("Get Song Error:", error);
+
+        return res.status(500).json({
+            message: "Failed to fetch song"
+        });
+    }
 }
 
 module.exports = { uploadSong, getSong}

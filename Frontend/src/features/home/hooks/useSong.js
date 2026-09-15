@@ -126,7 +126,7 @@ export const useSong = () => {
         setLoading,
         song,
         setSong,
-        setShouldPlay
+       // setShouldPlay
     } = context;
 
 
@@ -172,7 +172,7 @@ export const useSong = () => {
                 setSong(data.song);
 
                 // Player ko batana hai ki new song play karna hai
-                setShouldPlay(true);
+                //setShouldPlay(true);
 
             } else {
 
