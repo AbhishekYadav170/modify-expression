@@ -1561,6 +1561,36 @@
    MOBILE
    ========================================================= */
 
+/* @media (max-width: 650px) {
+
+    .video-container {
+        min-height: 330px;
+    }
+
+    .expression-video {
+        height: 330px;
+    }
+
+    .mood-result {
+        padding: 12px;
+    }
+
+    .mood-emoji-large,
+    .mood-placeholder-icon {
+        width: 44px;
+        height: 44px;
+    }
+
+    .mood-result-text strong {
+        font-size: 15px;
+    }
+
+    .mood-result-text p {
+        font-size: 9px;
+    }
+} */
+
+
 @media (max-width: 650px) {
 
     .video-container {
